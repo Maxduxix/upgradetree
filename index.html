@@ -116,10 +116,12 @@
 </head>
 <body>
   <div id="currency-bar">
-    🍃Leafs: <span id="currency-value1">0</span>
+    Tree age: <span id="currency-value0">0</span>
+    <span class="rate" id="rate0">(+0.00/s)</span>
+    Leafs: <span id="currency-value1">0</span>
     <span class="rate" id="rate1">(+0.00/s)</span>
     <span id="energy-section" style="display:none">
-      ⚡Energy: <span id="currency-value2">0</span>
+      Energy: <span id="currency-value2">0</span>
       <span class="rate" id="rate2">(+0.00/s)</span>
     </span>
   </div>
@@ -131,6 +133,8 @@
   <div id="tooltip" class="tooltip"></div>
 
 <script>
+let ta = 0;
+let taGain = 0.2;
 let leafs = 0;
 let leafGain = 0.1;
 let energy = 0;
@@ -141,20 +145,25 @@ let t2 = 0;
 let t3 = 0;
 let t4 = 0;
 
+let x0 = 0;
 let x1 = 0;
 let x2 = 0;
 
 let b1 = 1;
 
+const currencyEl0 = document.getElementById("currency-value0");
 const currencyEl1 = document.getElementById("currency-value1");
 const currencyEl2 = document.getElementById("currency-value2");
+const rateEl0 = document.getElementById("rate0");
 const rateEl1 = document.getElementById("rate1");
 const rateEl2 = document.getElementById("rate2");
 const energySection = document.getElementById("energy-section");
 
 function updateCurrency() {
+  currencyEl0.textContent = ta.toFixed(2);
   currencyEl1.textContent = leafs.toFixed(2);
   currencyEl2.textContent = energy.toFixed(2);
+  rateEl0.textContent = `(+${(x0 * 5).toFixed(2)}/s)`;
   rateEl1.textContent = `(+${(x1 * 5).toFixed(2)}/s)`;
   rateEl2.textContent = `(+${(x2 * 5).toFixed(2)}/s)`;
   if (t2 > 0) energySection.style.display = "inline";
@@ -162,10 +171,12 @@ function updateCurrency() {
 
 setInterval(() => {
   energyGain = leafs / 1000;
+  x0 = taGain;
   x1 = leafGain * t1 * (Math.log2(Math.pow((energy+45)/45,0.5))*t3 +1);
   x2 = energyGain * t2 *(((b1-9)/10)*t4+1);
   leafs += x1;
   energy += x2;
+  ta += taGain
   updateCurrency();
 }, 200);
 
@@ -197,29 +208,29 @@ id: "n2b",
 name: "Suspicous wet tissue",
 cost: 15,
 costCurrency: "leaf",
-reward: "+35% leaf gain",
+reward: "+45% leaf gain",
 description: "use it as a media for ur fucking plant (im so smart)",
 px: 0.5,
 py: 0.5,
-effect(){ leafGain *= 1.35; }
+effect(){ leafGain *= 1.45; }
 }],
 [{
 id: "n3a",
-name: "Side Effect of steroids user",
+name: "Side Effect of steroids",
 cost: 15,
-count: 10,
+count: 15,
 costcount: 1.35,
 costCurrency: "leaf",
-reward: "+20% leaf gain",
+reward: "+22% leaf gain",
 description: "smaller sausage each time..",
 px: 0,
 py: 1,
-effect(){ leafGain += (this._baseGain ??= leafGain) * 0.20;}
+effect(){ leafGain += (this._baseGain ??= leafGain) * 0.22;}
 }],
 [{
 id: "n4a",
 name: "phtoto synwhtsiesiss",
-cost: 35,
+cost: 30,
 costCurrency: "leaf",
 reward: "Start producing energy",
 description: "Energy gain is based on leafs/999.99... :nerd_emoji:",
